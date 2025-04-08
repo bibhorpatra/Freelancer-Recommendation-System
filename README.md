@@ -5,14 +5,11 @@ The Freelancer Recommendation System is an AI-powered solution designed to match
 Model Selection and Training Process
 1. Data Preprocessing
 The freelancer dataset and interaction data were cleaned and preprocessed.
-
 Freelancer skills, completed projects, and experience were vectorized using the TF-IDF Vectorizer.
-
 Interaction ratings were aggregated to create a matrix for collaborative filtering.
 
 2. Content-Based Filtering
 TF-IDF Vectorizer was used to calculate similarity scores between freelancers' skills, projects, and experience against job requirements.
-
 Availability was scored based on compatibility with the job timeline.
 
 3. Collaborative Filtering
@@ -20,13 +17,9 @@ A Truncated SVD model was trained on the interaction matrix to predict freelance
 
 4. Final Scoring
 A weighted scoring system combined:
-
 Skills similarity (30%)
-
 Projects similarity (30%)
-
 Experience similarity (20%)
-
 Availability score (20%)
 
 The top 5 freelancers with the highest final scores are returned as recommendations.
@@ -34,18 +27,14 @@ The top 5 freelancers with the highest final scores are returned as recommendati
 API Functionality and How to Test It
 API Endpoints
 Root Endpoint (/):
-
 Returns a message confirming that the API is running.
 
 Recommendation Endpoint (/recommend):
-
 Accepts job details as input.
-
 Returns the top 5 recommended freelancers based on the input criteria.
 
 Input Format
 The /recommend endpoint expects a JSON payload in the following format:
-
 json
 {
   "skills": ["Python", "Machine Learning"],
@@ -55,7 +44,6 @@ json
 }
 Output Format
 The API returns a JSON object containing the top 5 recommended freelancers:
-
 json
 {
   "recommendations": [
@@ -72,39 +60,27 @@ json
 }
 Testing Instructions
 Visit the hosted API link.
-
 Navigate to /docs to access the interactive Swagger UI.
-
 Expand the /recommend tab.
-
 Click Try it out, fill in the input fields (skills, budget, timeline, client ID), and press Execute.
-
 View the recommendations in the response section.
 
 Deployment Steps
 Deployment on Railway
 Create a Railway Project:
-
 Log in to your Railway account and create a new project.
 
 Upload Files:
-
 Upload all required files (main.py, model.py, datasets) to your Railway project repository.
 
 Configure Settings:
-
 Specify the runtime environment (python 3.12.4) in runtime.txt.
-
 Install dependencies by including requirement.txt in your project.
 
 Start Deployment:
-
 Deploy your FastAPI application by linking it to your Railway project.
-
 Railway will automatically build and host your application.
 
 Access API:
-
 Once deployed, access your hosted API link provided by Railway.
-
 Test functionality using Swagger UI (/docs) or any HTTP client like Postman.
