@@ -8,8 +8,8 @@ recommender = FreelancerRecommender()
 @app.on_event("startup")
 def startup_event():
     try:
-        freelancers_path = r"D:\Peerhire\assignment\Datasets\synthetic_freelancers_dataset.csv"
-        interactions_path = r"D:\Peerhire\assignment\Datasets\interactions_data.csv"
+        freelancers_path = r"./Datasets/synthetic_freelancers_dataset.csv"
+        interactions_path = r"./Datasets/interactions_data.csv"
         recommender.load_data(freelancers_path, interactions_path)
         recommender.preprocess()
     except Exception as e:
