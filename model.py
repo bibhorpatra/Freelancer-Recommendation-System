@@ -83,20 +83,24 @@ class FreelancerRecommender:
             else:
                 self.freelancers_df['Availability_Score'] = 0.5
 
-            # Collaborative filtering
+            # Collaborative filtering integration
+            cf_weight = 0.0  # Default weight
             if client_id and (self.reconstructed_df is not None) and (client_id in self.reconstructed_df.index):
                 predicted_ratings = self.reconstructed_df.loc[client_id]
                 predicted_ratings_normalized = predicted_ratings / (predicted_ratings.max() or 1)
                 self.freelancers_df['Predicted_Rating'] = predicted_ratings_normalized.reindex(self.freelancers_df.index).fillna(0)
+                cf_weight = 0.15  # 15% weight for collaborative filtering
             else:
                 self.freelancers_df['Predicted_Rating'] = 0
 
-            # Final scoring
+            # Dynamic weighted scoring
+            content_weight = 1 - cf_weight
             self.freelancers_df['Final_Score'] = (
-                0.3 * self.freelancers_df['Skills_Similarity_Score'] +
-                0.3 * self.freelancers_df['Projects_Similarity_Score'] +
-                0.2 * self.freelancers_df['Experience_Similarity_Score'] +
-                0.2 * self.freelancers_df['Availability_Score']
+                (0.35 * content_weight) * self.freelancers_df['Skills_Similarity_Score'] +
+                (0.35 * content_weight) * self.freelancers_df['Projects_Similarity_Score'] +
+                (0.20 * content_weight) * self.freelancers_df['Experience_Similarity_Score'] +
+                (0.10 * content_weight) * self.freelancers_df['Availability_Score'] +
+                cf_weight * self.freelancers_df['Predicted_Rating']
             )
 
             # Apply budget filter
@@ -104,12 +108,10 @@ class FreelancerRecommender:
             if job_budget:
                 filtered_freelancers = filtered_freelancers[filtered_freelancers['Hourly_Rate'] <= job_budget]
 
-            # Return top 5 recommendations
-            if filtered_freelancers.empty:
-                return pd.DataFrame()
-                
+            # Return top 5 recommendations with all required columns
             return filtered_freelancers.nlargest(5, 'Final_Score')[[
-                'Freelancer_ID', 'Hourly_Rate', 'Skills', 'Completed_Projects', 'Experience', 'Availability'
+                'Freelancer_ID', 'Hourly_Rate', 'Skills', 'Completed_Projects', 
+                'Experience', 'Availability'
             ]]
         except Exception as e:
             print(f"Error in recommend(): {str(e)}")
